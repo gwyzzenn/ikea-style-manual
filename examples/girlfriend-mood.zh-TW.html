@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OMTANKE 心情照顧說明書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#111;
+    --paper:#fff;
+    --desk:#e9e7e2;
+    --muted:#666;
+    --line:#111;
+    --soft:#f3f2ee;
+    --accent:#ffdb00;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--desk);
+    color:var(--ink);
+    font-family:Verdana,"Noto Sans TC",system-ui,sans-serif;
+    line-height:1.55;
+    padding:24px 16px 80px;
+  }
+  .page{
+    position:relative;
+    max-width:820px;
+    margin:0 auto 28px;
+    background:var(--paper);
+    padding:48px 48px 64px;
+    box-shadow:0 1px 0 rgba(0,0,0,.08),0 10px 30px rgba(0,0,0,.08);
+    overflow:hidden;
+  }
+  .pno{position:absolute;right:28px;bottom:20px;font-weight:700;font-size:15px}
+  .code{position:absolute;left:28px;bottom:20px;font-size:11px;color:var(--muted);letter-spacing:.08em}
+  h1,h2,h3{margin:0;font-weight:900;letter-spacing:.01em}
+  h2{font-size:22px;margin-bottom:6px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 28px}
+  p{margin:0}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.92em}
+  .k{background:var(--soft);padding:1px 6px;border-radius:3px}
+  svg{display:block;max-width:100%;height:auto}
+  .stroke{fill:none;stroke:var(--line);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+  /* cover */
+  .cover{padding:56px 48px 72px;min-height:min(860px,120vw);display:flex;flex-direction:column}
+  .cover .name{font-size:clamp(44px,10vw,92px);font-weight:900;letter-spacing:-.02em;line-height:1}
+  .cover .desc{font-size:16px;margin-top:10px;font-weight:500}
+  .cover .art{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 0}
+  .cover .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:8px;border:2.4px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+  .logo{background:var(--ink);color:#fff;font-weight:900;padding:6px 12px;letter-spacing:.06em;font-size:18px;border-radius:3px}
+
+  /* steps */
+  .step{display:grid;grid-template-columns:84px 1fr;gap:18px;align-items:start;padding:28px 0;border-top:1px dashed #bbb}
+  .step:first-of-type{border-top:0;padding-top:4px}
+  .num{font-size:64px;font-weight:900;line-height:.9}
+  .step > div{min-width:0}
+  .step h3{font-size:18px;margin-bottom:6px}
+  .step p{font-size:14.5px}
+  .frame{border:2.4px solid var(--ink);border-radius:4px;padding:16px;margin-top:14px;position:relative;background:#fff}
+  .cap{font-size:13px;color:var(--muted);margin-top:8px}
+
+  /* ok / no marks */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .tri{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .quad{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .mark{position:absolute;top:-14px;right:-14px;width:36px;height:36px;border-radius:50%;background:#fff;border:2.4px solid var(--ink);display:grid;place-items:center;font-weight:900;font-size:20px;line-height:1}
+  .panel{border:2.4px solid var(--ink);border-radius:4px;padding:18px 16px 16px;position:relative;background:#fff}
+  .panel h4{margin:10px 0 4px;font-size:15px}
+  .panel p{font-size:13.5px;color:#333}
+  .panel.no{background:repeating-linear-gradient(135deg,#fff 0 10px,#fafafa 10px 20px)}
+
+  /* parts */
+  .parts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .part{border:1.5px solid #ccc;border-radius:4px;padding:14px 10px 12px;text-align:center;position:relative}
+  .part .qty{position:absolute;left:10px;top:8px;font-weight:900;font-size:15px}
+  .part .lbl{font-weight:700;font-size:13.5px;margin-top:8px}
+  .part .fn{font-size:12px;color:var(--muted)}
+  .part.x{opacity:.55}
+  .part.x::after{content:"";position:absolute;inset:0;background:
+    linear-gradient(to top right,transparent calc(50% - 1.5px),#111 calc(50% - 1.5px),#111 calc(50% + 1.5px),transparent calc(50% + 1.5px))}
+
+  /* letters */
+  .tag{display:inline-grid;place-items:center;min-width:26px;height:26px;border:2.4px solid var(--ink);border-radius:50%;font-weight:900;font-size:13px;margin-right:8px;flex:none}
+  .legend{display:grid;gap:10px;margin-top:6px}
+  .legend div{display:flex;align-items:flex-start;font-size:14px}
+
+  /* table of specs */
+  .spec{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+  .spec td{border-bottom:1px solid #ddd;padding:8px 4px;vertical-align:top}
+  .spec td:first-child{font-weight:700;white-space:nowrap;width:30%}
+
+  /* checklist */
+  .check{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  .check li{display:flex;gap:12px;align-items:flex-start;font-size:15px}
+  .box{width:22px;height:22px;border:2.4px solid var(--ink);flex:none;margin-top:2px;border-radius:2px}
+  .freq{font-size:11px;font-weight:700;border:1.5px solid var(--ink);border-radius:999px;padding:1px 8px;margin-left:6px;white-space:nowrap}
+
+  /* command cards */
+  .cards{display:grid;gap:14px}
+  .card{border:2.4px solid var(--ink);border-radius:4px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start}
+  .card .t{font-weight:700;font-size:14px;margin-bottom:4px}
+  .card .q{font-size:13.5px;color:#333}
+  .copy{font:inherit;font-size:12px;font-weight:700;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+  .copy:hover{background:var(--ink);color:#fff}
+  .copy.done{background:var(--accent);color:var(--ink)}
+
+  .note{display:flex;gap:12px;align-items:flex-start;background:var(--soft);padding:12px 14px;border-radius:4px;font-size:13.5px;margin-top:14px}
+  .bang{flex:none;width:26px;height:26px;border:2.4px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:14px;background:#fff}
+
+  @media (max-width:640px){
+    body{padding:12px 0 48px}
+    .page{padding:32px 16px 56px;margin-bottom:16px}
+    .cover{padding:36px 16px 64px;min-height:auto}
+    .step{grid-template-columns:1fr;gap:6px}
+    .num{font-size:48px}
+    .duo,.tri,.quad{grid-template-columns:1fr}
+    .parts{grid-template-columns:1fr 1fr}
+    .card{grid-template-columns:1fr}
+    .card .copy,.card .tag{justify-self:start}
+    .mark{right:-6px}
+    .frame.wide{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .frame.wide > svg{min-width:600px}
+  }
+  @media print{
+    body{background:#fff;padding:0}
+    .page{box-shadow:none;margin:0;page-break-after:always}
+    .copy{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ DRAWING KIT ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- person. Add a mouth inside a nested <svg viewBox="0 0 60 120">:
+         smile  M25 20 Q30 24 35 20   frown  M25 23 Q30 19 35 23 -->
+    <symbol id="man" viewBox="0 0 60 120">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M22 76 L20 114 L28 114 L30 82 L32 114 L40 114 L38 76 Z"/>
+        <path d="M17 38 L10 70 L15 71 L21 48"/>
+        <path d="M43 38 L50 70 L45 71 L39 48"/>
+        <path d="M16 40 Q16 32 25 32 L35 32 Q44 32 44 40 L42 78 L18 78 Z"/>
+        <circle cx="30" cy="16" r="13"/>
+      </g>
+    </symbol>
+    <!-- helper: the same person with a small sparkle by the head (Claude, a colleague, a tool) -->
+    <symbol id="helper" viewBox="0 0 60 120">
+      <use href="#man"/>
+      <path d="M50 1 V11 M45 6 H55 M46.5 2.5 L53.5 9.5 M53.5 2.5 L46.5 9.5" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="laptop" viewBox="0 0 80 60">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round">
+        <rect x="11" y="4" width="58" height="40" rx="3"/>
+        <path d="M2 48 L78 48 L72 56 L8 56 Z"/>
+      </g>
+      <path d="M20 16 L26 21 L20 26 M30 27 L40 27" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="cloud" viewBox="0 0 100 60">
+      <path d="M25 52 Q6 52 6 37 Q6 22 23 22 Q27 6 46 6 Q63 6 69 20 Q93 18 94 37 Q94 52 77 52 Z" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="vault" viewBox="0 0 70 70">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <rect x="4" y="4" width="62" height="56" rx="4"/>
+        <circle cx="35" cy="32" r="14"/>
+        <path d="M35 18 L35 22 M35 42 L35 46 M21 32 L25 32 M45 32 L49 32"/>
+        <path d="M35 32 L42 26"/>
+        <path d="M12 60 L12 66 M58 60 L58 66"/>
+      </g>
+    </symbol>
+    <symbol id="globe" viewBox="0 0 60 60">
+      <g fill="#fff" stroke="#111" stroke-width="2.4">
+        <circle cx="30" cy="30" r="25"/>
+        <ellipse cx="30" cy="30" rx="11" ry="25" fill="none"/>
+        <path d="M5 30 H55 M9 17 H51 M9 43 H51" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="photo" viewBox="0 0 70 56">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round">
+        <rect x="3" y="3" width="64" height="50" rx="3"/>
+        <path d="M8 46 L26 26 L38 38 L46 30 L62 46 Z"/>
+        <circle cx="50" cy="15" r="5"/>
+      </g>
+    </symbol>
+    <symbol id="film" viewBox="0 0 70 56">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round">
+        <rect x="3" y="3" width="64" height="50" rx="3"/>
+        <path d="M3 13 H67 M3 43 H67" fill="none"/>
+        <path d="M29 20 L44 28 L29 36 Z" fill="#111"/>
+      </g>
+      <g fill="#111"><rect x="9" y="6" width="5" height="4"/><rect x="21" y="6" width="5" height="4"/><rect x="33" y="6" width="5" height="4"/><rect x="45" y="6" width="5" height="4"/><rect x="57" y="6" width="5" height="4"/>
+      <rect x="9" y="46" width="5" height="4"/><rect x="21" y="46" width="5" height="4"/><rect x="33" y="46" width="5" height="4"/><rect x="45" y="46" width="5" height="4"/><rect x="57" y="46" width="5" height="4"/></g>
+    </symbol>
+    <symbol id="folder" viewBox="0 0 70 56">
+      <path d="M3 10 Q3 5 8 5 L26 5 L32 12 L62 12 Q67 12 67 17 L67 48 Q67 53 62 53 L8 53 Q3 53 3 48 Z" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="tagicon" viewBox="0 0 70 56">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round">
+        <path d="M6 10 L40 10 L64 28 L40 46 L6 46 Z"/>
+        <circle cx="18" cy="28" r="5"/>
+      </g>
+    </symbol>
+    <symbol id="server" viewBox="0 0 60 80">
+      <g fill="#fff" stroke="#111" stroke-width="2.4">
+        <rect x="6" y="4" width="48" height="22" rx="2"/>
+        <rect x="6" y="29" width="48" height="22" rx="2"/>
+        <rect x="6" y="54" width="48" height="22" rx="2"/>
+      </g>
+      <g fill="#111"><circle cx="44" cy="15" r="2.5"/><circle cx="44" cy="40" r="2.5"/><circle cx="44" cy="65" r="2.5"/></g>
+    </symbol>
+    <symbol id="box" viewBox="0 0 80 70">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round">
+        <path d="M6 20 L40 6 L74 20 L74 56 L40 66 L6 56 Z"/>
+        <path d="M6 20 L40 32 L74 20 M40 32 L40 66" fill="none"/>
+        <path d="M23 13 L57 26" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="doc" viewBox="0 0 56 70">
+      <path d="M4 4 H38 L52 18 V66 H4 Z" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M38 4 V18 H52" fill="none" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M12 30 H44 M12 40 H40 M12 50 H44" stroke="#bbb" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#111"/>
+    </marker>
+    <!-- her: the same person with shoulder-length hair -->
+    <symbol id="her" viewBox="0 0 60 120">
+      <use href="#man"/>
+      <path d="M16 20 Q14 2 30 2 Q46 2 44 20 L48 34 M16 20 L12 34" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="mug" viewBox="0 0 72 64">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M8 18 H52 V52 Q52 60 44 60 H16 Q8 60 8 52 Z"/>
+        <path d="M52 26 Q66 26 66 38 Q66 50 52 50"/>
+        <path d="M20 12 Q16 8 20 4 M30 12 Q26 8 30 4 M40 12 Q36 8 40 4" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="timer" viewBox="0 0 60 66">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linecap="round">
+        <circle cx="30" cy="36" r="26"/>
+        <path d="M24 4 H36 M30 4 V10" fill="none"/>
+        <path d="M30 36 V20 M30 36 L40 42" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="phone" viewBox="0 0 40 64">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <rect x="4" y="2" width="32" height="60" rx="5"/>
+        <path d="M16 54 H24" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="heart" viewBox="0 0 60 54">
+      <path d="M30 50 C8 34 2 22 6 13 C10 3 24 2 30 13 C36 2 50 3 54 13 C58 22 52 34 30 50 Z" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="bubble" viewBox="0 0 90 60">
+      <path d="M10 4 H80 Q86 4 86 10 V38 Q86 44 80 44 H34 L20 56 L22 44 H10 Q4 44 4 38 V10 Q4 4 10 4 Z" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="ear" viewBox="0 0 50 70">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M8 28 Q8 4 27 4 Q46 4 46 26 Q46 40 34 48 Q28 54 28 60 Q28 68 18 66"/>
+        <path d="M18 28 Q18 15 27 15 Q36 15 36 26 Q36 33 29 35" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="tissue" viewBox="0 0 70 56">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M26 22 Q24 6 34 10 Q40 0 46 10 L44 22"/>
+        <rect x="4" y="20" width="62" height="32" rx="3"/>
+        <path d="M22 26 H48" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="calendar" viewBox="0 0 60 60">
+      <g fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <rect x="4" y="8" width="52" height="48" rx="3"/>
+        <path d="M4 20 H56 M18 3 V13 M42 3 V13" fill="none"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ 封面 ============ -->
+<section class="page cover">
+  <div class="name">OMTANKE</div>
+  <div class="desc">女友心情照顧說明書　｜　2 人作業・先聽再說</div>
+  <div class="art">
+    <svg viewBox="0 0 560 360" width="560" aria-label="一個人端著熱飲，陪在心情不好的女友旁邊">
+      <use href="#cloud" x="335" y="28" width="120" height="72"/>
+      <path d="M368 110 L362 128 M398 110 L392 128 M428 110 L422 128" class="stroke" stroke-dasharray="4 7"/>
+      <svg x="340" y="150" width="110" height="200" viewBox="0 0 60 120"><use href="#her"/><path d="M25 22 Q30 20 35 22" class="stroke"/></svg>
+      <svg x="130" y="150" width="110" height="200" viewBox="0 0 60 120"><use href="#man"/><path d="M25 20 Q30 24 35 20" class="stroke"/></svg>
+      <use href="#mug" x="226" y="250" width="50" height="44"/>
+      <text x="282" y="210" font-size="26" font-weight="900">♥</text>
+      <path d="M20 352 H540" class="stroke"/>
+    </svg>
+  </div>
+  <div class="foot">
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <span class="badge"><svg viewBox="0 0 60 120" width="12"><use href="#man"/></svg> 2 人</span>
+      <span class="badge">⏱ 先聽 20 分鐘</span>
+      <span class="badge">難度 ●●○</span>
+    </div>
+    <span class="logo">聽 &gt; 修</span>
+  </div>
+  <span class="code">AA-0003 · 版本 1</span>
+</section>
+
+<!-- ============ 零件 ============ -->
+<section class="page">
+  <h2>開箱：你需要的東西</h2>
+  <p class="sub">耳朵和時間不能省。打叉的東西，這一回合用不到。</p>
+  <div class="parts">
+    <div class="part"><span class="qty">2×</span><svg viewBox="0 0 50 70" width="40" style="margin:auto"><use href="#ear"/></svg><div class="lbl">耳朵</div><div class="fn">先聽完，不急著回</div></div>
+    <div class="part"><span class="qty">20′</span><svg viewBox="0 0 60 66" width="54" style="margin:auto"><use href="#timer"/></svg><div class="lbl">完整的時間</div><div class="fn">不是「等一下喔」</div></div>
+    <div class="part"><span class="qty">1×</span><svg viewBox="0 0 72 64" width="60" style="margin:auto"><use href="#mug"/></svg><div class="lbl">熱飲</div><div class="fn">她習慣喝的那種</div></div>
+    <div class="part"><span class="qty">1×</span><svg viewBox="0 0 70 56" width="62" style="margin:auto"><use href="#tissue"/></svg><div class="lbl">衛生紙</div><div class="fn">放她伸手拿得到的地方</div></div>
+    <div class="part"><span class="qty">0–1×</span><svg viewBox="0 0 60 54" width="54" style="margin:auto"><use href="#heart"/></svg><div class="lbl">擁抱</div><div class="fn">先問「要抱一下嗎？」</div></div>
+    <div class="part"><span class="qty">1×</span><svg viewBox="0 0 56 70" width="44" style="margin:auto"><use href="#doc"/></svg><div class="lbl">記性</div><div class="fn">記住她說過的事</div></div>
+    <div class="part x"><svg viewBox="0 0 40 64" width="30" style="margin:auto"><use href="#phone"/></svg><div class="lbl">手機</div><div class="fn">螢幕朝下</div></div>
+    <div class="part x"><svg viewBox="0 0 90 60" width="70" style="margin:auto"><use href="#bubble"/></svg><div class="lbl">大道理</div><div class="fn">現在聽不進去</div></div>
+  </div>
+  <div class="note" style="margin-top:22px"><span class="bang">!</span>
+    <div><b>為什麼不先講道理？</b> 心情不好的人，第一個需要的是「有人懂我」，不是「有人糾正我」。道理要等她覺得被接住之後，才聽得進去。</div>
+  </div>
+  <span class="pno">2</span>
+</section>
+
+<!-- ============ 兩人作業 ============ -->
+<section class="page">
+  <h2>坐在旁邊，不等於有在聽</h2>
+  <p class="sub">這份說明書需要兩個人都在場——身體和注意力都要。</p>
+  <div class="duo">
+    <div class="panel no"><span class="mark">✕</span>
+      <svg viewBox="0 0 300 200">
+        <svg x="40" y="40" width="80" height="150" viewBox="0 0 60 120"><use href="#man"/><path d="M25 22 H35" class="stroke"/></svg>
+        <use href="#phone" x="104" y="96" width="20" height="32"/>
+        <text x="20" y="30" font-size="14" font-weight="700">「嗯嗯…」</text>
+        <svg x="180" y="40" width="80" height="150" viewBox="0 0 60 120"><use href="#her"/><path d="M25 23 Q30 19 35 23" class="stroke"/></svg>
+        <text x="256" y="62" font-size="26" font-weight="900">?</text>
+        <path d="M20 190 H280" class="stroke"/>
+      </svg>
+      <h4>邊滑手機邊「嗯」</h4><p>她會覺得在跟空氣講話，然後更難過。</p></div>
+    <div class="panel"><span class="mark">✓</span>
+      <svg viewBox="0 0 300 200">
+        <svg x="50" y="40" width="80" height="150" viewBox="0 0 60 120"><use href="#man"/><path d="M25 20 Q30 24 35 20" class="stroke"/></svg>
+        <svg x="170" y="40" width="80" height="150" viewBox="0 0 60 120"><use href="#her"/><path d="M25 22 Q30 23 35 22" class="stroke"/></svg>
+        <text x="140" y="76" font-size="22" font-weight="900">♥</text>
+        <rect x="236" y="180" width="44" height="8" rx="2" fill="#fff" stroke="#111" stroke-width="2.4"/>
+        <text x="240" y="172" font-size="11" font-weight="700">朝下</text>
+        <path d="M20 190 H230" class="stroke"/>
+      </svg>
+      <h4>手機蓋著，身體轉向她</h4><p>眼睛看她，偶爾點頭。她會知道你在。</p></div>
+  </div>
+  <span class="pno">3</span>
+</section>
+
+<!-- ============ 全貌 ============ -->
+<section class="page">
+  <h2>全貌：從「她怪怪的」到「她好一點了」</h2>
+  <p class="sub">六個站。最多人跳過的是第 3 站。</p>
+  <div class="frame wide">
+    <svg viewBox="0 0 720 230" aria-label="照顧心情的六個步驟">
+      <use href="#cloud" x="25" y="58" width="70" height="42"/>
+      <path d="M45 106 L41 118 M60 106 L56 118 M75 106 L71 118" class="stroke" stroke-dasharray="3 6"/>
+      <use href="#phone" x="162" y="50" width="36" height="58"/>
+      <path d="M152 58 L208 104 M208 58 L152 104" stroke="#111" stroke-width="2.4" stroke-linecap="round"/>
+      <use href="#bubble" x="258" y="56" width="84" height="56"/>
+      <text x="300" y="88" font-size="22" font-weight="900" text-anchor="middle">?</text>
+      <use href="#ear" x="396" y="46" width="48" height="68"/>
+      <use href="#mug" x="506" y="52" width="70" height="62"/>
+      <use href="#calendar" x="630" y="50" width="60" height="60"/>
+      <text x="660" y="98" font-size="16" font-weight="900" text-anchor="middle">+1</text>
+      <g class="stroke" marker-end="url(#arr)">
+        <path d="M104 84 H140"/><path d="M216 84 H252"/><path d="M350 84 H386"/><path d="M456 84 H496"/><path d="M586 84 H620"/>
+      </g>
+      <g font-size="14" font-weight="700" text-anchor="middle">
+        <text x="60" y="160">① 察覺</text><text x="180" y="160">② 放下手機</text><text x="300" y="160">③ 問</text>
+        <text x="420" y="160">④ 聽</text><text x="540" y="160">⑤ 照顧</text><text x="660" y="160">⑥ 隔天追蹤</text>
+      </g>
+      <path d="M250 190 H470" class="stroke" stroke-dasharray="5 6"/>
+      <text x="360" y="214" font-size="12" fill="#555" text-anchor="middle">最關鍵的兩站：先問，再聽</text>
+    </svg>
+  </div>
+  <div class="legend" style="margin-top:18px">
+    <div><span class="tag">1</span>順序不能跳：還沒聽完就照顧（或給建議），她會覺得你只想快點結束。</div>
+    <div><span class="tag">2</span>不用找出「為什麼」才能開始。看到她不對勁，就從第 2 站進場。</div>
+    <div><span class="tag">3</span>第 6 站最便宜也最有效：一句話，讓她知道你有放在心上。</div>
+  </div>
+  <span class="pno">4</span>
+</section>
+
+<!-- ============ 步驟 1–2 ============ -->
+<section class="page">
+  <div class="step"><div class="num">1</div><div>
+    <h3>察覺訊號，不用先猜原因</h3>
+    <p>回訊息變短、變慢、變安靜，或說「沒事」「隨便」。注意到就好，原因等一下讓她自己說。</p>
+    <div class="frame wide"><svg viewBox="0 0 640 170">
+      <use href="#phone" x="40" y="20" width="80" height="128"/>
+      <g fill="#fff" stroke="#111" stroke-width="2.4">
+        <rect x="150" y="26" width="90" height="34" rx="17"/><rect x="150" y="68" width="90" height="34" rx="17"/><rect x="150" y="110" width="90" height="34" rx="17"/>
+      </g>
+      <g font-size="16" font-weight="700" text-anchor="middle"><text x="195" y="49">嗯。</text><text x="195" y="91">沒事。</text><text x="195" y="133">隨便。</text></g>
+      <path d="M260 86 H320" class="stroke" marker-end="url(#arr)"/>
+      <rect x="336" y="56" width="280" height="60" rx="4" fill="#fff" stroke="#111" stroke-width="3.4"/>
+      <text x="476" y="93" font-size="18" font-weight="900" text-anchor="middle">她可能不是沒事</text>
+      <text x="476" y="146" font-size="12" fill="#555" text-anchor="middle">訊號：變短・變慢・變安靜</text>
+    </svg></div>
+  </div></div>
+  <div class="step"><div class="num">2</div><div>
+    <h3>放下手機，轉過來</h3>
+    <p>手機螢幕朝下、電視關小聲、身體正面對她。第一句只要邀請，不要追問。</p>
+    <div class="frame wide"><svg viewBox="0 0 640 180">
+      <rect x="40" y="130" width="90" height="12" rx="3" fill="#fff" stroke="#111" stroke-width="2.4"/>
+      <text x="85" y="166" font-size="13" font-weight="700" text-anchor="middle">螢幕朝下</text>
+      <path d="M144 120 H184" class="stroke" marker-end="url(#arr)"/>
+      <svg x="200" y="40" width="64" height="128" viewBox="0 0 60 120"><use href="#man"/><path d="M25 20 Q30 24 35 20" class="stroke"/></svg>
+      <svg x="430" y="40" width="64" height="128" viewBox="0 0 60 120"><use href="#her"/><path d="M25 23 Q30 19 35 23" class="stroke"/></svg>
+      <rect x="276" y="4" width="196" height="66" rx="10" fill="#fff" stroke="#111" stroke-width="2.4"/>
+      <path d="M290 70 L264 84 L306 70" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M292 70 H304" stroke="#fff" stroke-width="3"/>
+      <g font-size="14" font-weight="700"><text x="292" y="32">你看起來有點累，</text><text x="292" y="56">要聊聊嗎？</text></g>
+      <path d="M180 170 H540" class="stroke"/>
+    </svg></div>
+  </div></div>
+  <span class="pno">5</span>
+</section>
+
+<!-- ============ 步驟 3–4 ============ -->
+<section class="page">
+  <div class="step"><div class="num">3</div><div>
+    <h3>先問一句：要聽，還是要解法？</h3>
+    <p>最常見的吵架是：她想被聽見，你卻開始給建議。直接問，答案只有兩種。</p>
+    <div class="frame wide"><svg viewBox="0 0 640 170">
+      <rect x="20" y="20" width="310" height="56" rx="10" fill="#fff" stroke="#111" stroke-width="2.4"/>
+      <path d="M50 76 L40 96 L72 76" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M52 76 H70" stroke="#fff" stroke-width="3"/>
+      <text x="175" y="54" font-size="15" font-weight="700" text-anchor="middle">要我聽就好，還是一起想辦法？</text>
+      <path d="M338 42 L392 36" class="stroke" marker-end="url(#arr)"/>
+      <path d="M338 54 L392 118" class="stroke" marker-end="url(#arr)"/>
+      <rect x="400" y="14" width="210" height="44" rx="22" fill="#fff" stroke="#111" stroke-width="3.4"/>
+      <text x="505" y="42" font-size="15" font-weight="900" text-anchor="middle">A　聽就好 → 第 4 步</text>
+      <rect x="400" y="100" width="210" height="44" rx="22" fill="#fff" stroke="#111" stroke-width="2.4"/>
+      <text x="505" y="128" font-size="15" font-weight="900" text-anchor="middle">B　想辦法 → 第 8 頁</text>
+      <text x="20" y="126" font-size="12" fill="#555">問了不丟臉，</text>
+      <text x="20" y="146" font-size="12" fill="#555">猜錯才麻煩。</text>
+    </svg></div>
+  </div></div>
+  <div class="step"><div class="num">4</div><div>
+    <h3>聽：把她的感受說回去</h3>
+    <p>用自己的話複述她的感受，不評論對錯、不插嘴、不比慘。沉默幾秒沒關係。</p>
+    <div class="frame wide"><svg viewBox="0 0 640 170">
+      <rect x="20" y="20" width="230" height="50" rx="10" fill="#fff" stroke="#111" stroke-width="2.4"/>
+      <text x="135" y="51" font-size="15" font-weight="700" text-anchor="middle">主管當眾唸我…</text>
+      <path d="M258 40 L322 38" class="stroke" marker-end="url(#arr)"/>
+      <path d="M258 52 L322 118" class="stroke" marker-end="url(#arr)"/>
+      <rect x="330" y="14" width="290" height="52" rx="10" fill="#fff" stroke="#111" stroke-width="3.4"/>
+      <text x="348" y="46" font-size="15" font-weight="700">被當眾唸，一定很丟臉。</text>
+      <text x="592" y="47" font-size="20" font-weight="900">✓</text>
+      <rect x="330" y="98" width="290" height="52" rx="10" fill="#fff" stroke="#111" stroke-width="2.4" stroke-dasharray="6 6"/>
+      <text x="348" y="130" font-size="15" font-weight="700" fill="#666">你是不是哪裡做錯？</text>
+      <text x="592" y="131" font-size="20" font-weight="900">✕</text>
+      <text x="20" y="116" font-size="12" fill="#555">接住感受 ✓</text>
+      <text x="20" y="136" font-size="12" fill="#555">檢討對錯 ✕（至少不是現在）</text>
+    </svg></div>
+  </div></div>
+  <span class="pno">6</span>
+</section>
+
+<!-- ============ 步驟 5–6 ============ -->
+<section class="page">
+  <div class="step"><div class="num">5</div><div>
+    <h3>給一個具體的照顧</h3>
+    <p>「有需要再跟我說」等於沒說。直接做一件小事——她不用開口要。</p>
+    <div class="frame wide"><svg viewBox="0 0 640 160">
+      <use href="#mug" x="40" y="26" width="90" height="80"/>
+      <use href="#tissue" x="190" y="36" width="100" height="80"/>
+      <use href="#heart" x="368" y="36" width="84" height="76"/>
+      <use href="#box" x="512" y="30" width="96" height="84"/>
+      <g font-size="13" font-weight="700" text-anchor="middle">
+        <text x="85" y="142">熱飲</text><text x="240" y="142">衛生紙</text><text x="410" y="142">擁抱（先問）</text><text x="560" y="142">她愛的那家外帶</text>
+      </g>
+    </svg></div>
+  </div></div>
+  <div class="step"><div class="num">6</div><div>
+    <h3>隔天再問一次</h3>
+    <p>心情不會一晚就清空。隔天一句話，讓她知道你不是只處理「當下的麻煩」。</p>
+    <div class="frame wide"><svg viewBox="0 0 640 150">
+      <use href="#calendar" x="50" y="26" width="80" height="80"/>
+      <use href="#calendar" x="250" y="26" width="80" height="80"/>
+      <g font-size="13" font-weight="700" text-anchor="middle"><text x="90" y="134">今天：聽完</text><text x="290" y="134">隔天：追蹤</text></g>
+      <path d="M146 70 H236" class="stroke" stroke-dasharray="5 6" marker-end="url(#arr)"/>
+      <text x="190" y="58" font-size="12" fill="#555" text-anchor="middle">+1 天</text>
+      <path d="M346 70 H392" class="stroke" marker-end="url(#arr)"/>
+      <rect x="404" y="34" width="216" height="72" rx="10" fill="#fff" stroke="#111" stroke-width="3.4"/>
+      <g font-size="15" font-weight="700"><text x="422" y="64">昨天那件事，</text><text x="422" y="90">今天有好一點嗎？</text></g>
+    </svg></div>
+  </div></div>
+  <span class="pno">7</span>
+</section>
+
+<!-- ============ 決策樹 ============ -->
+<section class="page">
+  <h2>她現在需要什麼？照這張走</h2>
+  <p class="sub">看不出來就問。三個答案，三種做法。</p>
+  <div class="frame wide">
+    <svg viewBox="0 0 720 300" aria-label="依照她的需要選擇做法的決策樹">
+      <rect x="200" y="20" width="320" height="50" rx="25" fill="#fff" stroke="#111" stroke-width="2.4"/>
+      <text x="360" y="51" font-size="15" font-weight="700" text-anchor="middle">問：「你現在需要什麼？」</text>
+      <path d="M250 70 L130 144" class="stroke" marker-end="url(#arr)"/>
+      <path d="M360 70 V144" class="stroke" marker-end="url(#arr)"/>
+      <path d="M470 70 L590 144" class="stroke" marker-end="url(#arr)"/>
+      <g font-size="13" font-weight="900"><text x="120" y="102">想被聽見</text><text x="370" y="114">想解決</text><text x="548" y="102">想靜一靜</text></g>
+      <g>
+        <rect x="20" y="150" width="220" height="120" rx="4" fill="#fff" stroke="#111" stroke-width="3.4"/>
+        <text x="36" y="182" font-size="15" font-weight="900">A　陪著聽</text>
+        <text x="36" y="210" font-size="12.5">不插嘴、不給建議</text>
+        <text x="36" y="232" font-size="12.5">偶爾回「嗯，然後呢？」</text>
+        <text x="36" y="254" font-size="12.5">→ 第 6 頁</text>
+        <rect x="250" y="150" width="220" height="120" rx="4" fill="#fff" stroke="#111" stroke-width="3.4"/>
+        <text x="266" y="182" font-size="15" font-weight="900">B　一起列選項</text>
+        <text x="266" y="210" font-size="12.5">先聽完，再列 2–3 個做法</text>
+        <text x="266" y="232" font-size="12.5">讓她選，不替她決定</text>
+        <text x="266" y="254" font-size="12.5">做完記得問：有好點嗎？</text>
+        <rect x="480" y="150" width="220" height="120" rx="4" fill="#fff" stroke="#111" stroke-width="3.4"/>
+        <text x="496" y="182" font-size="15" font-weight="900">C　給空間＋說在哪</text>
+        <text x="496" y="210" font-size="12.5">「我在客廳，想聊叫我」</text>
+        <text x="496" y="232" font-size="12.5">不是消失，是待命</text>
+        <text x="496" y="254" font-size="12.5">一小時後送杯水進去</text>
+      </g>
+    </svg>
+  </div>
+  <div class="note"><span class="bang">!</span><div>她說「沒事」但看起來有事 → 選 C，並補一句「好，那我在旁邊，想說的時候我都在」。不要逼問，也不要真的當作沒事。</div></div>
+  <span class="pno">8</span>
+</section>
+
+<!-- ============ ✓✕ 說法 ============ -->
+<section class="page">
+  <h2>換一句話說</h2>
+  <p class="sub">同樣是關心，第一句就決定她會打開還是關上。</p>
+  <div class="duo">
+    <div class="panel no"><span class="mark">✕</span>
+      <svg viewBox="0 0 300 120"><rect x="20" y="20" width="260" height="60" rx="10" fill="#fff" stroke="#111" stroke-width="2.4"/><path d="M56 80 L46 104 L84 80" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/><path d="M58 80 H82" stroke="#fff" stroke-width="3"/><text x="150" y="57" font-size="16" font-weight="700" text-anchor="middle">「別想太多了啦。」</text></svg>
+      <h4>否定感受</h4><p>她聽到的是「你的難過不合理」，會開始捍衛自己的情緒。</p></div>
+    <div class="panel"><span class="mark">✓</span>
+      <svg viewBox="0 0 300 120"><rect x="20" y="20" width="260" height="60" rx="10" fill="#fff" stroke="#111" stroke-width="3.4"/><path d="M56 80 L46 104 L84 80" fill="#fff" stroke="#111" stroke-width="3.4" stroke-linejoin="round"/><path d="M58 80 H82" stroke="#fff" stroke-width="4"/><text x="150" y="57" font-size="16" font-weight="700" text-anchor="middle">「這真的很讓人難受。」</text></svg>
+      <h4>承認感受</h4><p>先同意「難受是正常的」，她才會放鬆下來繼續說。</p></div>
+  </div>
+  <div class="duo" style="margin-top:28px">
+    <div class="panel no"><span class="mark">✕</span>
+      <svg viewBox="0 0 300 120"><rect x="20" y="20" width="260" height="60" rx="10" fill="#fff" stroke="#111" stroke-width="2.4"/><path d="M56 80 L46 104 L84 80" fill="#fff" stroke="#111" stroke-width="2.4" stroke-linejoin="round"/><path d="M58 80 H82" stroke="#fff" stroke-width="3"/><text x="150" y="57" font-size="16" font-weight="700" text-anchor="middle">「好啦，對不起啦。」</text></svg>
+      <h4>敷衍的道歉</h4><p>沒說錯在哪，等於「你很煩，先這樣」。下次同一件事會再吵。</p></div>
+    <div class="panel"><span class="mark">✓</span>
+      <svg viewBox="0 0 300 120"><rect x="20" y="20" width="260" height="60" rx="10" fill="#fff" stroke="#111" stroke-width="3.4"/><path d="M56 80 L46 104 L84 80" fill="#fff" stroke="#111" stroke-width="3.4" stroke-linejoin="round"/><path d="M58 80 H82" stroke="#fff" stroke-width="4"/><text x="150" y="57" font-size="15" font-weight="700" text-anchor="middle">「我剛那樣說讓你難過，對不起。」</text></svg>
+      <h4>說出具體的錯</h4><p>講清楚哪句話、哪個行為，再說下次怎麼做。</p></div>
+  </div>
+  <span class="pno">9</span>
+</section>
+
+<!-- ============ 絕對不要 ============ -->
+<section class="page">
+  <h2>絕對不要</h2>
+  <p class="sub">四個讓小情緒變大吵架的動作。</p>
+  <div class="quad">
+    <div class="panel no"><span class="mark">✕</span>
+      <svg viewBox="0 0 260 110"><rect x="40" y="14" width="180" height="70" rx="10" fill="#fff" stroke="#111" stroke-width="2.4"/><g font-size="15" font-weight="700" text-anchor="middle"><text x="130" y="44">「你是不是</text><text x="130" y="68">生理期啊？」</text></g></svg>
+      <h4>把情緒歸給荷爾蒙</h4><p>就算是，也等於說「你的感受不用當真」。保證火上加油。</p></div>
+    <div class="panel no"><span class="mark">✕</span>
+      <svg viewBox="0 0 260 110"><rect x="10" y="12" width="120" height="40" rx="10" fill="#fff" stroke="#111" stroke-width="2.4"/><text x="70" y="38" font-size="14" font-weight="700" text-anchor="middle">今天好累…</text><rect x="120" y="60" width="130" height="40" rx="10" fill="#fff" stroke="#111" stroke-width="3.4"/><text x="185" y="86" font-size="14" font-weight="900" text-anchor="middle">我更累好嗎！</text></svg>
+      <h4>比慘</h4><p>話題被你搶走了。她不會再說下去，只會覺得更孤單。</p></div>
+    <div class="panel no"><span class="mark">✕</span>
+      <svg viewBox="0 0 260 110"><g class="stroke"><path d="M130 14 V96 M96 96 H164 M70 30 H190"/><path d="M70 30 L54 62 H86 Z M190 30 L174 62 H206 Z" fill="#fff"/></g><g font-size="12" font-weight="700" text-anchor="middle"><text x="70" y="82">她</text><text x="190" y="82">別人</text></g></svg>
+      <h4>當法官評誰對</h4><p>「其實你主管也有道理」——她要的是隊友，不是裁判。</p></div>
+    <div class="panel no"><span class="mark">✕</span>
+      <svg viewBox="0 0 260 110"><svg x="40" y="4" width="56" height="104" viewBox="0 0 60 120"><use href="#her"/><path d="M25 23 Q30 19 35 23" class="stroke"/></svg><use href="#phone" x="120" y="22" width="36" height="58"/><g font-size="13" font-weight="700"><text x="168" y="46">已讀</text><text x="168" y="68">3 小時</text></g></svg>
+      <h4>冷處理，等她自己好</h4><p>她學到的是「我難過的時候你不在」。要空間，也要說你在哪。</p></div>
+  </div>
+  <span class="pno">10</span>
+</section>
+
+<!-- ============ 保養 ============ -->
+<section class="page">
+  <h2>平常保養</h2>
+  <p class="sub">平時存款夠，心情不好的那天才不會透支。</p>
+  <ul class="check">
+    <li><span class="box"></span><div>問「今天最開心／最煩的一件事是什麼？」，然後聽完 <span class="freq">每天</span></div></li>
+    <li><span class="box"></span><div>一段兩個人都不滑手機的時間：吃飯、散步都算 <span class="freq">每週</span></div></li>
+    <li><span class="box"></span><div>記下她提過的小事：想吃的店、在煩的人、重要的日子 <span class="freq">隨時</span></div></li>
+    <li><span class="box"></span><div>她的大日子（報告、考試、面試）前一天問：「需要我做什麼？」 <span class="freq">看行事曆</span></div></li>
+    <li><span class="box"></span><div>吵完架冷靜後，一起聊：下次怎麼做會更好 <span class="freq">每次</span></div></li>
+    <li><span class="box"></span><div>主動問她：「我最近有哪裡可以做得更好？」 <span class="freq">每月</span></div></li>
+  </ul>
+  <span class="pno">11</span>
+</section>
+
+<!-- ============ 說法卡 ============ -->
+<section class="page">
+  <h2>說法卡：卡住時直接用</h2>
+  <p class="sub">不用背，挑一張，換成自己的語氣說出來。</p>
+  <div class="cards">
+    <div class="card"><span class="tag">A</span><div><div class="t">開場（第 2 步）</div><div class="q">你看起來有點悶，想聊聊嗎？不想說也沒關係，我就在這。</div></div><button class="copy">複製</button></div>
+    <div class="card"><span class="tag">B</span><div><div class="t">確認需求（第 3 步）</div><div class="q">你想要我聽就好，還是我們一起想辦法？</div></div><button class="copy">複製</button></div>
+    <div class="card"><span class="tag">C</span><div><div class="t">接住感受（第 4 步）</div><div class="q">聽起來真的很委屈，換作是我也會很不舒服。</div></div><button class="copy">複製</button></div>
+    <div class="card"><span class="tag">D</span><div><div class="t">給空間但不消失</div><div class="q">好，我先讓你靜一下。我在客廳，想聊隨時叫我。</div></div><button class="copy">複製</button></div>
+    <div class="card"><span class="tag">E</span><div><div class="t">具體的道歉</div><div class="q">我剛剛＿＿＿讓你難過了，對不起。下次我會＿＿＿。</div></div><button class="copy">複製</button></div>
+    <div class="card"><span class="tag">F</span><div><div class="t">隔天追蹤（第 6 步）</div><div class="q">昨天那件事，今天有好一點嗎？</div></div><button class="copy">複製</button></div>
+  </div>
+  <span class="pno">12</span>
+</section>
+
+<!-- ============ 封底 ============ -->
+<section class="page" style="text-align:center;padding-top:64px">
+  <svg viewBox="0 0 400 220" width="400" style="margin:0 auto" aria-hidden="true">
+    <svg x="110" y="40" width="80" height="160" viewBox="0 0 60 120"><use href="#man"/><path d="M25 23 Q30 19 35 23" class="stroke"/></svg>
+    <text x="196" y="66" font-size="34" font-weight="900">?</text>
+    <path d="M200 140 H240" class="stroke" marker-end="url(#arr)"/>
+    <use href="#bubble" x="250" y="110" width="90" height="60"/>
+    <path d="M60 200 H340" class="stroke"/>
+  </svg>
+  <h2 style="margin-top:18px">還是不知道怎麼辦？</h2>
+  <p style="max-width:520px;margin:10px auto 0;font-size:15px">每個人都不一樣，最準的說明書是她本人。<br>挑個兩人心情都好的時候，一起填這四格：</p>
+  <div class="frame" style="max-width:520px;margin:18px auto 0;text-align:left">
+    <p class="mono" style="font-size:14px">我難過的時候，最希望你：___<br>最不希望你：___<br>最有用的一句話：___<br>我比較需要：聽／解法／空間</p>
+  </div>
+  <div class="note" style="max-width:520px;margin:22px auto 0;text-align:left"><span class="bang">!</span>
+    <div>如果低落持續兩週以上、吃不下睡不好，或提到傷害自己——這已經超出這本說明書。陪她一起找專業協助：<b>安心專線 1925</b>（24 小時、免付費）。</div>
+  </div>
+  <p class="cap" style="margin-top:28px">OMTANKE・女友心情照顧說明書・AA-0003</p>
+  <span class="pno">13</span>
+</section>
+
+<script>
+  document.querySelectorAll('.copy').forEach(function(btn){
+    var label = btn.textContent;
+    btn.addEventListener('click', function(){
+      var text = btn.parentElement.querySelector('.q').textContent;
+      function ok(){ btn.textContent='已複製'; btn.classList.add('done'); setTimeout(function(){btn.textContent=label;btn.classList.remove('done');},1400); }
+      try{ navigator.clipboard.writeText(text).then(ok, function(){ fallback(text); ok(); }); }
+      catch(e){ fallback(text); ok(); }
+    });
+  });
+  function fallback(text){
+    var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    ta.remove();
+  }
+</script>
+</body>
+</html>
